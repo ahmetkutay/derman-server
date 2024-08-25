@@ -22,7 +22,7 @@ const config: Config = {
         },
     },
     jwtSecrets: {
-        jwtSecret: process.env.JWTSECRET,
+        jwtSecret: process.env.JWT_SECRET,
         accessTokenExpiration: process.env.ACCESSTOKENEXPIRATION,
         refreshTokenExpiration: process.env.REFRESHTOKENEXPIRATION,
     }
