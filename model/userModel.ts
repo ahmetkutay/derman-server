@@ -8,6 +8,7 @@ export interface IUser extends Document {
     password: string;
     phone: string;
     birthdate: string;
+    gender: string;
     posts: Types.ObjectId[];
     messages: Types.ObjectId[];
     comments: Types.ObjectId[];
@@ -21,6 +22,7 @@ const UserSchema = new Schema<IUser>({
     password: { type: String, required: true },
     phone: { type: String, required: true },
     birthdate: { type: String, required: true },
+    gender: { type: String, required: true },
     posts: [{ type: Types.ObjectId, ref: 'Post' }],
     messages: [{ type: Types.ObjectId, ref: 'Message' }],
     comments: [{ type: Types.ObjectId, ref: 'Comment' }]
