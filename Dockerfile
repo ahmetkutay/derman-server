@@ -13,9 +13,6 @@ RUN npm install
 # If TypeScript is used, install it globally (optional)
 RUN npm install -g typescript
 
-# Copy the environment configuration file
-COPY .env .env
-
 # Copy the rest of the application code
 COPY . .
 
