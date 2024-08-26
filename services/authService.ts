@@ -1,6 +1,7 @@
 import User, {IUser} from "../model/userModel";
 import bcrypt from 'bcryptjs';
 import {sendConfirmMail} from "../helpers/customHelpers";
+import verifyToken from "../middlewares/jwtMiddleware";
 
 export const createUser = async (userData: Omit<IUser, any>): Promise<IUser> => {
     try {
@@ -64,6 +65,25 @@ const comparePassword = async (candidatePassword: string, hashedPassword: string
  * @returns {Promise<boolean>} - A promise that resolves with a boolean indicating if the password is valid.
  */
 export const validatePassword = async (password: string, hashedPassword: string): Promise<boolean> => {
-    const user = new User();
     return await comparePassword(password, hashedPassword);
+};
+
+export const confirmVerificationToken = async (token: string, userID: string): Promise<boolean> => {
+    if (!token) {
+        return false
+    }
+    try {
+        const user: IUser | null = await User.findById(userID);
+        if (!user) {
+            return false
+        }
+        if (token === user.verificationToken) {
+            await User.updateOne({ _id: userID }, { $set: { verified: true, verificationToken:""} });
+            return true;
+        } else {
+            return false
+        }
+    } catch (err) {
+        throw new Error(`Verification failed: ${(err as Error).message}`);
+    }
 };
