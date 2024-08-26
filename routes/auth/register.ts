@@ -12,7 +12,6 @@ router.post(
     ajvMiddleware,
     checkExistingUser,
     async (req, res, next) => {
-        const jwtHelper = new JWT();
         try{
             const randomText = generateRandomText(6);
 
@@ -33,15 +32,8 @@ router.post(
             };
 
             const user = await createUser(userData);
-            const accessTokenPayload = {userId: user._id, username: user.username};
-            const accessToken = jwtHelper.generateAccessToken(accessTokenPayload);
-            const refreshTokenPayload = {userId: user._id, username: user.username};
-            const refreshToken = jwtHelper.generateRefreshToken(refreshTokenPayload);
-
             const result = {
                 user: user._id,
-                accessToken:accessToken,
-                refreshToken:refreshToken
             };
             return res.status(200).json(result);
         } catch (err) {
