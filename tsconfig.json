@@ -9,7 +9,13 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "outDir": "./dist",
+    "typeRoots": [
+      "./node_modules/@types",
+      "./types"
+    ]
   },
-  "include": ["src/**/*.ts","*.ts"],
+  "include": ["src/**/*.ts","*.ts",
+    "types/xss-clean.d.ts"
+  ],
   "exclude": ["node_modules"]
 }

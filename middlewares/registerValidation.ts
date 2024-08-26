@@ -46,6 +46,10 @@ const schema = {
         birthdate: {
             type: "string",
             errorMessage: "Invalid birthdate",
+        },
+        gender: {
+            type: "string",
+            errorMessage: "Invalid gender",
         }
     },
     required: ["username", "first_name", "last_name", "email", "phone", 'birthdate'],

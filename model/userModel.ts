@@ -9,6 +9,8 @@ export interface IUser extends Document {
     phone: string;
     birthdate: string;
     gender: string;
+    verified: boolean;
+    verificationToken: string;
     posts: Types.ObjectId[];
     messages: Types.ObjectId[];
     comments: Types.ObjectId[];
@@ -23,6 +25,8 @@ const UserSchema = new Schema<IUser>({
     phone: { type: String, required: true },
     birthdate: { type: String, required: true },
     gender: { type: String, required: true },
+    verified: { type: "Boolean", required: false, default: false },
+    verificationToken: { type: String, required: false },
     posts: [{ type: Types.ObjectId, ref: 'Post' }],
     messages: [{ type: Types.ObjectId, ref: 'Message' }],
     comments: [{ type: Types.ObjectId, ref: 'Comment' }]

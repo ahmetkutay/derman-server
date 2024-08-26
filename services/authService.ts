@@ -1,9 +1,11 @@
 import User, {IUser} from "../model/userModel";
 import bcrypt from 'bcryptjs';
+import {sendConfirmMail} from "../helpers/customHelpers";
 
 export const createUser = async (userData: Omit<IUser, any>): Promise<IUser> => {
     try {
         const user = new User(userData);
+        await sendConfirmMail(user.email,user.first_name, user.last_name, user.verificationToken)
         return await user.save();
     } catch (error) {
         console.error('Error creating user:', error);
