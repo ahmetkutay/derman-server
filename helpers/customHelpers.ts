@@ -48,5 +48,24 @@ export async function sendConfirmMail(to: string, first_name:string,last_name:st
 }
 
 export async function sendMail(to: string, subject: string, text: string, html?: string): Promise<void> {
-    //TODO create a mail template
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: config.email.email,
+            pass: config.email.password
+        }
+    });
+    const mailOptions = {
+        from: config.email.email,
+        to,
+        subject,
+        text,
+        html
+    };
+    try {
+        const info = await transporter.sendMail(mailOptions);
+        console.log('Message sent: %s', info.messageId);
+    } catch (error) {
+        console.error('Error sending email: %s', error);
+    }
 }
