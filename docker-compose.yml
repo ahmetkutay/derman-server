@@ -7,7 +7,4 @@ services:
       - .env
     ports:
       - "8000:8080"
-    volumes:
-      - .:/usr/src/app
-    command: ["node", "dist/index.js"]
     restart: unless-stopped
