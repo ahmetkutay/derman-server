@@ -17,7 +17,7 @@ class JWT {
     }
 
     generateRefreshToken(payload: object): string {
-        return jwt.sign(payload, this.secretKey, { expiresIn: this.refreshTokenExpiresIn });
+        return jwt.sign(payload, this.secretKey, { expiresIn: parseInt(this.refreshTokenExpiresIn) });
     }
 
     verifyToken(token: string): object | null {

@@ -1,12 +1,12 @@
-import mongoose, {Document, Schema} from 'mongoose';
+import mongoose, {Document, Schema, Types} from 'mongoose';
 
 export interface ITweet extends Document {
     text: string;
     author: string;
     category: string;
     createdAt: Date;
-    likes: number;
-    retweets: number;
+    likes: Types.ObjectId[];
+    retweets: Types.ObjectId[];
 }
 
 const TweetSchema: Schema = new Schema({
@@ -14,8 +14,8 @@ const TweetSchema: Schema = new Schema({
     author: {type: String, required: true},
     category: {type: String, required: true},
     createdAt: {type: Date, default: Date.now},
-    likes: {type: Number, default: 0},
-    retweets: {type: Number, default: 0},
+    likes: [{ type: Types.ObjectId, ref: 'Likes' }],
+    retweets: [{ type: Types.ObjectId, ref: 'Retweets' }]
 });
 
 const Tweet = mongoose.model<ITweet>('Tweet', TweetSchema);

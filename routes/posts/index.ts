@@ -1,5 +1,6 @@
-import {Router, Request, Response} from 'express';
-
+import {Router, Request, Response, text} from 'express';
+import {createPost} from '../../services/postService'
+import {ITweet} from "../../model/postModel";
 const router = Router();
 
 router.get('/', (req: Request, res: Response) => {
@@ -7,11 +8,22 @@ router.get('/', (req: Request, res: Response) => {
 });
 
 router.post('/', async (req: Request, res: Response) => {
-    const {text,_id} = req.body
+    const {text,_id,category} = req.body
+    // @ts-ignore
+    const {userId} = req.user;
     try {
-        console.log("post")
+        const postData : Omit<ITweet, any> = {
+            text: text,
+            author: userId,
+            category: category
+        }
+        const result = await createPost(postData)
+        if(result._id){
+            res.status(201).send(result._id)
+        }
+        res.status(400).send(result)
     } catch (error) {
-        res.status(500).send('Server error');
+        res.status(500).send(error);
     }
 });
 
