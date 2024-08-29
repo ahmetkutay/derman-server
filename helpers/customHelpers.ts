@@ -8,6 +8,7 @@ export function generateRandomText(length: number): string {
         randomText += characters.charAt(Math.floor(Math.random() * characters.length));
     }
     return randomText;
+
 }
 
 export async function sendConfirmMail(to: string, first_name:string,last_name:string, verificationToken: string): Promise<void> {

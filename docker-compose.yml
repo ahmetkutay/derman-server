@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    env_file:
+      - .env
+    ports:
+      - "8000:8080"
+    volumes:
+      - .:/usr/src/app
+    command: ["node", "dist/index.js"]
+    restart: unless-stopped
