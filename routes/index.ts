@@ -1,7 +1,7 @@
 import {Router, Request, Response} from 'express';
 import authRouter from './auth/index'
 import userRouter from './user/index'
-import isValidUser from "../middlewares/isValidUser";
+import postRouter from "./posts/index";
 import verifyToken from "../middlewares/jwtMiddleware";
 
 const router = Router();
@@ -12,5 +12,6 @@ router.get('/', (req: Request, res: Response) => {
 
 router.use('/auth', authRouter);
 router.use('/user',verifyToken,userRouter)
+router.use('/post',verifyToken, postRouter)
 
 export default router;
