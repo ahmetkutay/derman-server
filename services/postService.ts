@@ -18,5 +18,5 @@ export async function updatePost(id: string, postData: Partial<ITweet>): Promise
 }
 
 export async function deletePost(id: string): Promise<ITweet | null> {
-    return Tweet.findByIdAndDelete(id);
+    return Tweet.findByIdAndDelete(id).exec();
 }

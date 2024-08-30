@@ -1,43 +1,66 @@
 import {Router, Request, Response, text} from 'express';
-import {createPost} from '../../services/postService'
+import {createPost, deletePost, getAllPosts, updatePost} from '../../services/postService'
 import {ITweet} from "../../model/postModel";
 const router = Router();
 
-router.get('/', (req: Request, res: Response) => {
-    res.send('Welcome to the post page!');
+router.get('/', async (req: Request, res: Response) => {
+    try {
+        const posts = await getAllPosts();
+        return res.status(200).json(posts);
+    } catch (error) {
+        return res.status(500).send('Server error');
+    }
 });
 
 router.post('/', async (req: Request, res: Response) => {
-    const {text,_id,category} = req.body
+    const {text,category} = req.body
     // @ts-ignore
     const {userId} = req.user;
     try {
-        const postData : Omit<ITweet, any> = {
+        const postData : Partial<ITweet> = {
             text: text,
             author: userId,
             category: category
         }
         const result = await createPost(postData)
         if(result._id){
-            res.status(201).send(result._id)
+            return res.status(201).send(result._id)
         }
-        res.status(400).send(result)
+        return res.status(400).send(result)
     } catch (error) {
-        res.status(500).send(error);
+        return res.status(500).send(error);
     }
 });
 
 router.put('/', async (req: Request, res: Response) => {
+    const {text,category,postId} = req.body
+    // @ts-ignore
+    const {userId} = req.user;
     try {
-        console.log("put")
+        const postData : Partial<ITweet> = {
+            text: text,
+            author: userId,
+            category: category
+        }
+        const result = await updatePost(postId,postData)
+        if(!result){
+            return res.status(404).send(result);
+        }
+        return res.status(200).send(result._id)
     } catch (error) {
         res.status(500).send('Server error');
     }
 });
 
 router.delete('/', async (req: Request, res: Response) => {
+    // @ts-ignore
+    const {postId} = req.body;
     try {
-        console.log("delete")
+        const result = await deletePost(postId);
+        if(!result){
+            return res.status(404).send(result);
+        }
+        return res.status(200).send(result._id)
     } catch (error) {
         res.status(500).send('Server error');
     }

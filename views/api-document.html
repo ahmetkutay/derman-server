@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        .endpoint {
+            background-color: #fff;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .method {
+            font-weight: bold;
+            color: #007BFF;
+        }
+        .url {
+            color: #FF5733;
+        }
+        pre {
+            background-color: #eee;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        code {
+            font-family: "Courier New", Courier, monospace;
+        }
+    </style>
+</head>
+<body>
+
+<h1>API Documentation</h1>
+
+<div class="endpoint">
+    <h2>User API</h2>
+    <p><span class="method">GET</span> <span class="url">/api/user/{id}</span></p>
+    <p>Retrieve user details by ID.</p>
+    <h3>Parameters:</h3>
+    <ul>
+        <li><code>id</code> (integer) - The ID of the user.</li>
+    </ul>
+    <h3>Response:</h3>
+    <pre><code>{
+    "id": 1,
+    "name": "John Doe",
+    "email": "john@example.com"
+}</code></pre>
+
+    <p><span class="method">POST</span> <span class="url">/api/user</span></p>
+    <p>Create a new user.</p>
+    <h3>Body Parameters:</h3>
+    <ul>
+        <li><code>name</code> (string) - The name of the user.</li>
+        <li><code>email</code> (string) - The email of the user.</li>
+        <li><code>password</code> (string) - The password of the user.</li>
+    </ul>
+    <h3>Response:</h3>
+    <pre><code>{
+    "id": 2,
+    "name": "Jane Doe",
+    "email": "jane@example.com"
+}</code></pre>
+</div>
+
+<div class="endpoint">
+    <h2>Auth API</h2>
+    <p><span class="method">POST</span> <span class="url">/api/auth/login</span></p>
+    <p>Authenticate a user and return a token.</p>
+    <h3>Body Parameters:</h3>
+    <ul>
+        <li><code>email</code> (string) - The email of the user.</li>
+        <li><code>password</code> (string) - The password of the user.</li>
+    </ul>
+    <h3>Response:</h3>
+    <pre><code>{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}</code></pre>
+
+    <p><span class="method">POST</span> <span class="url">/api/auth/register</span></p>
+    <p>Register a new user.</p>
+    <h3>Body Parameters:</h3>
+    <ul>
+        <li><code>name</code> (string) - The name of the user.</li>
+        <li><code>email</code> (string) - The email of the user.</li>
+        <li><code>password</code> (string) - The password of the user.</li>
+    </ul>
+    <h3>Response:</h3>
+    <pre><code>{
+    "id": 3,
+    "name": "Alice Doe",
+    "email": "alice@example.com",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}</code></pre>
+</div>
+
+<div class="endpoint">
+    <h2>Post API</h2>
+    <p><span class="method">GET</span> <span class="url">/api/post/{id}</span></p>
+    <p>Retrieve a post by ID.</p>
+    <h3>Parameters:</h3>
+    <ul>
+        <li><code>id</code> (integer) - The ID of the post.</li>
+    </ul>
+    <h3>Response:</h3>
+    <pre><code>{
+    "id": 1,
+    "title": "My first post",
+    "content": "This is the content of the post."
+}</code></pre>
+
+    <p><span class="method">POST</span> <span class="url">/api/post</span></p>
+    <p>Create a new post.</p>
+    <h3>Body Parameters:</h3>
+    <ul>
+        <li><code>title</code> (string) - The title of the post.</li>
+        <li><code>content</code> (string) - The content of the post.</li>
+    </ul>
+    <h3>Response:</h3>
+    <pre><code>{
+    "id": 2,
+    "title": "Another post",
+    "content": "This is another post content."
+}</code></pre>
+</div>
+
+<div class="endpoint">
+    <h2>Chat API</h2>
+    <p><span class="method">GET</span> <span class="url">/api/chat/{id}</span></p>
+    <p>Retrieve chat messages by chat ID.</p>
+    <h3>Parameters:</h3>
+    <ul>
+        <li><code>id</code> (integer) - The ID of the chat.</li>
+    </ul>
+    <h3>Response:</h3>
+    <pre><code>[
+    {
+        "sender": "John Doe",
+        "message": "Hello, how are you?",
+        "timestamp": "2024-08-30T10:00:00Z"
+    },
+    {
+        "sender": "Jane Doe",
+        "message": "I'm good, thanks!",
+        "timestamp": "2024-08-30T10:01:00Z"
+    }
+]</code></pre>
+
+    <p><span class="method">POST</span> <span class="url">/api/chat</span></p>
+    <p>Send a new chat message.</p>
+    <h3>Body Parameters:</h3>
+    <ul>
+        <li><code>chat_id</code> (integer) - The ID of the chat.</li>
+        <li><code>sender</code> (string) - The name of the sender.</li>
+        <li><code>message</code> (string) - The message content.</li>
+    </ul>
+    <h3>Response:</h3>
+    <pre><code>{
+    "chat_id": 1,
+    "sender": "John Doe",
+    "message": "See you soon!",
+    "timestamp": "2024-08-30T10:02:00Z"
+}</code></pre>
+</div>
+
+</body>
+</html>
