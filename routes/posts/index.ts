@@ -15,11 +15,12 @@ router.get('/', async (req: Request, res: Response) => {
 router.post('/', async (req: Request, res: Response) => {
     const {text,category} = req.body
     // @ts-ignore
-    const {userId} = req.user;
+    const {_id} = req.user;
+
     try {
         const postData : Partial<ITweet> = {
             text: text,
-            author: userId,
+            author: _id,
             category: category
         }
         const result = await createPost(postData)
@@ -35,11 +36,11 @@ router.post('/', async (req: Request, res: Response) => {
 router.put('/', async (req: Request, res: Response) => {
     const {text,category,postId} = req.body
     // @ts-ignore
-    const {userId} = req.user;
+    const {_id} = req.user;
     try {
         const postData : Partial<ITweet> = {
             text: text,
-            author: userId,
+            author: _id,
             category: category
         }
         const result = await updatePost(postId,postData)

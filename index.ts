@@ -8,6 +8,8 @@ import hpp from 'hpp';
 import xssClean from 'xss-clean';
 import router from './routes/index';
 import config from './config/config'
+import passport from 'passport';
+import { jwtStrategy } from './passport/jwtStrategy';
 
 const app = express();
 
@@ -31,11 +33,18 @@ app.use(xssClean());
 
 const limiter = rateLimit({
     windowMs: 60 * 1000,
-    limit: 20
+    limit: 200
 });
 app.use(limiter);
 
+app.use(passport.initialize())
+jwtStrategy(passport)
+
 app.use('/v1', router);
+
+app.get('/protected', passport.authenticate('jwt', { session: false }), (req, res) => {
+    res.send('This is a protected route');
+});
 
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {

@@ -11,6 +11,7 @@ export interface IUser extends Document {
     gender: string;
     verified: boolean;
     verificationToken: string;
+    refreshToken: string;
     tweets: Types.ObjectId[];
     messages: Types.ObjectId[];
     comments: Types.ObjectId[];
@@ -27,6 +28,7 @@ const UserSchema = new Schema<IUser>({
     gender: { type: String, required: true },
     verified: { type: "Boolean", required: false, default: false },
     verificationToken: { type: String, required: false },
+    refreshToken: { type: String, required: false },
     tweets: [{ type: Types.ObjectId, ref: 'Tweet' }],
     messages: [{ type: Types.ObjectId, ref: 'Message' }],
     comments: [{ type: Types.ObjectId, ref: 'Comment' }]

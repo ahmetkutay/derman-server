@@ -14,12 +14,12 @@ router.post('/', async (req: Request, res: Response) => {
     const {commentId} = req.params
     const replyId: Types.ObjectId = new Types.ObjectId(commentId);
     // @ts-ignore
-    const {userId} = req.user;
+    const {_id} = req.user;
 
     try {
         const postData : Partial<IReply> = {
             content: text,
-            author: userId,
+            author: _id,
             commentedId: replyId
         }
         const result = await createReply(postData)
@@ -37,12 +37,12 @@ router.put('/:replyId', async (req: Request, res: Response) => {
     const {commentId,replyId} = req.params
     const postCommentId: Types.ObjectId = new Types.ObjectId(commentId);
     // @ts-ignore
-    const {userId} = req.user;
+    const {_id} = req.user;
 
     try {
         const postData : Partial<IReply> = {
             content: text,
-            author: userId,
+            author: _id,
             commentedId: postCommentId
         }
         const result = await updateReply(replyId,postData)

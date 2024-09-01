@@ -20,12 +20,12 @@ router.post('/:postId',verifyPost, async (req: Request, res: Response) => {
     const {postId} = req.params
     const tweet: Types.ObjectId = new Types.ObjectId(postId);
     // @ts-ignore
-    const {userId} = req.user;
+    const {_id} = req.user;
 
     try {
         const postData : Partial<IComment> = {
             text: text,
-            author: userId,
+            author: _id,
             tweet: tweet
         }
         const result = await createComment(postData)
@@ -43,11 +43,11 @@ router.put('/:postId/:commentId',verifyPost, async (req: Request, res: Response)
     const {postId,commentId} = req.params
     const tweet: Types.ObjectId = new Types.ObjectId(postId);
     // @ts-ignore
-    const {userId} = req.user;
+    const {_id} = req.user;
     try {
         const commentData : Partial<IComment> = {
             text: text,
-            author: userId,
+            author: _id,
             tweet: tweet
         }
         const result = await updateComment(commentId,commentData)

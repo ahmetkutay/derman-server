@@ -27,6 +27,14 @@ class JWT {
             return null;
         }
     }
+    isRefreshTokenExpired(token: string): boolean {
+        try {
+            jwt.verify(token, this.secretKey);
+            return false;
+        } catch (err) {
+            return true;
+        }
+    }
 }
 
 export default JWT;

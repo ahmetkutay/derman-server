@@ -2,6 +2,8 @@ import {Router} from 'express';
 import JWT from '../../helpers/jwtHelper';
 import checkExistingUserForLogin from '../../helpers/loginValidation';
 import {validatePassword} from "../../services/authService";
+import {Types} from "mongoose";
+import User from "../../model/userModel";
 
 const router = Router();
 
@@ -24,9 +26,18 @@ router.post(
             // @ts-ignore
             const accessTokenPayload = {userId: loggedUserData._id, username: loggedUserData.username};
             const accessToken = jwtHelper.generateAccessToken(accessTokenPayload);
+            const refreshToken = jwtHelper.generateRefreshToken(accessTokenPayload);
+            // @ts-ignore
+            if(jwtHelper.isRefreshTokenExpired(loggedUserData.refreshToken)){
+                // @ts-ignore
+                const userId: Types.ObjectId = new Types.ObjectId(loggedUserData._id as string);
+                await User.updateOne({ _id: userId}, { $set: { refreshToken: refreshToken } });
+            }
+            // @ts-ignore
+            const refreshedToken = loggedUserData.refreshToken === '' ? refreshToken : loggedUserData.refreshToken;
             const result = {
-                user: loggedUserData,
-                accessToken
+                accessToken,
+                refreshedToken
             };
             return res.status(200).json(result);
         } catch (err) {
