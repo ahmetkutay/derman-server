@@ -10,6 +10,8 @@ import router from './routes/index';
 import config from './config/config'
 import passport from 'passport';
 import { jwtStrategy } from './passport/jwtStrategy';
+import { createServer } from 'http';
+import { initializeWebSocketServer } from './webSocket';
 
 const app = express();
 
@@ -45,6 +47,8 @@ app.use('/v1', router);
 app.get('/protected', passport.authenticate('jwt', { session: false }), (req, res) => {
     res.send('This is a protected route');
 });
+
+initializeWebSocketServer();
 
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {

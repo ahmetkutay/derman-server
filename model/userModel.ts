@@ -1,8 +1,7 @@
 import { Schema, model, Document, Types } from 'mongoose';
 
 export interface IUser extends Document {
-    first_name: string;
-    last_name: string;
+    name: string;
     username: string;
     email: string;
     password: string;
@@ -15,15 +14,16 @@ export interface IUser extends Document {
     tweets: Types.ObjectId[];
     messages: Types.ObjectId[];
     comments: Types.ObjectId[];
+    followers: Types.ObjectId[];
+    followed: Types.ObjectId[];
 }
 
 const UserSchema = new Schema<IUser>({
-    first_name: { type: String, required: true },
-    last_name: { type: String, required: true },
-    username: { type: String, required: true, unique: true },
+    name: { type: String, required: true },
+    username: { type: String, required: true, unique: false },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    phone: { type: String, required: true },
+    phone: { type: String, required: false },
     birthdate: { type: String, required: true },
     gender: { type: String, required: true },
     verified: { type: "Boolean", required: false, default: false },
@@ -31,7 +31,9 @@ const UserSchema = new Schema<IUser>({
     refreshToken: { type: String, required: false },
     tweets: [{ type: Types.ObjectId, ref: 'Tweet' }],
     messages: [{ type: Types.ObjectId, ref: 'Message' }],
-    comments: [{ type: Types.ObjectId, ref: 'Comment' }]
+    comments: [{ type: Types.ObjectId, ref: 'Comment' }],
+    followers: [{ type: Types.ObjectId, ref: 'Comment' }],
+    followed: [{ type: Types.ObjectId, ref: 'Comment' }]
 });
 
 const User = model<IUser>('User', UserSchema);

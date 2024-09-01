@@ -6,7 +6,7 @@ import verifyToken from "../middlewares/jwtMiddleware";
 export const createUser = async (userData: Omit<IUser, any>): Promise<IUser> => {
     try {
         const user = new User(userData);
-        await sendConfirmMail(user.email,user.first_name, user.last_name, user.verificationToken)
+        await sendConfirmMail(user.email,user.name, user.verificationToken)
         return await user.save();
     } catch (error) {
         console.error('Error creating user:', error);

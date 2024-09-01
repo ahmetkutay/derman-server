@@ -11,7 +11,7 @@ export function generateRandomText(length: number): string {
 
 }
 
-export async function sendConfirmMail(to: string, first_name:string,last_name:string, verificationToken: string): Promise<void> {
+export async function sendConfirmMail(to: string, name:string, verificationToken: string): Promise<void> {
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
@@ -24,7 +24,7 @@ export async function sendConfirmMail(to: string, first_name:string,last_name:st
     const text = `Your verification token is: ${verificationToken}`;
     const html = `
         <div style="font-family: Arial, sans-serif; text-align: center;">
-            <h2>Hi ${first_name} ${last_name}</h2>
+            <h2>Hi ${name}</h2>
             <p>Thank you for registering with DermanApp!</p>
             <p>Your verification token is:</p>
             <h3 style="color: #2E86C1;">${verificationToken}</h3>

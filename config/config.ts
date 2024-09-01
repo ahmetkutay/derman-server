@@ -17,6 +17,9 @@ interface Config {
     email:{
         email: string,
         password: string,
+    },
+    webSocket: {
+        port: number | undefined,
     }
 }
 
@@ -34,6 +37,9 @@ const config: Config = {
     email: {
         email: process.env.EMAIL as string,
         password: process.env.EMAIL_PASSWORD as string,
+    },
+    webSocket: {
+        port: process.env.WEB_SOCKET as unknown as number,
     }
 };
 
