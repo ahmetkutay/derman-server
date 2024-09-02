@@ -31,6 +31,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(hpp());
 app.use(xssClean());
+app.set("trust proxy",1)
 
 const limiter = rateLimit({
     windowMs: 60 * 1000,
