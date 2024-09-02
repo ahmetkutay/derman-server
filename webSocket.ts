@@ -1,72 +1,41 @@
-import WebSocket, { WebSocketServer } from 'ws';
-import { v4 as uuidv4 } from 'uuid';
-import config from "./config/config";
+import { WebSocketServer, WebSocket } from 'ws';
+import config from './config/config';
+import JWT from "./helpers/jwtHelper";
+import JwtHelper from "./helpers/jwtHelper";
 
 export const initializeWebSocketServer = () => {
     const port = config.webSocket.port;
     const wss = new WebSocketServer({ port });
-
+    const jwtHelper = new JwtHelper();
     const clients: Map<string, WebSocket> = new Map();
-    const chatRooms: Map<string, { user1: string, user2: string }> = new Map();
-    const userSockets: Map<string, string> = new Map();
 
-    wss.on('connection', (ws: WebSocket) => {
-        const clientId = uuidv4();
-        clients.set(clientId, ws);
-        ws.send(JSON.stringify({ type: 'WELCOME', id: clientId }));
+    wss.on('connection', (ws: WebSocket,request) => {
+        const token = new URLSearchParams(request.url?.split('?')[1]).get('token');
+        let userId: any | null =jwtHelper.extractTokenVariables(token as string)
+        let clientId = userId.userId;
+        if (!token) {
+            ws.send(JSON.stringify({ type: 'ERROR', message: 'Token not provided' }));
+            ws.close();
+            return;
+        }
 
-        ws.on('message', (message: WebSocket.MessageEvent) => {
-            try {
-                const parsedMessage = JSON.parse(message.toString());
+        // @ts-ignore
+        ws.on('message', (data: WebSocket.Data) => {
+            const message = JSON.parse(data.toString());
+            const { targetId, text } = message;
 
-                if (parsedMessage.type === 'SET_USER_ID') {
-                    userSockets.set(parsedMessage.userId, clientId);
-                    ws.send(JSON.stringify({ type: 'USER_ID_SET', userId: parsedMessage.userId }));
-                } else if (parsedMessage.type === 'JOIN_CHAT') {
-                    chatRooms.set(parsedMessage.chatRoomId, {
-                        user1: parsedMessage.user1Id,
-                        user2: parsedMessage.user2Id
-                    });
-                } else if (parsedMessage.type === 'PRIVATE_MESSAGE') {
-                    const { chatRoomId, fromId, message: chatMessage } = parsedMessage;
-                    const chatRoom = chatRooms.get(chatRoomId);
-
-                    if (chatRoom) {
-                        const targetClientId = [chatRoom.user1, chatRoom.user2].find(id => id !== fromId);
-                        const targetClient = userSockets.get(targetClientId as string);
-
-                        if (targetClient) {
-                            const targetWs = clients.get(targetClient);
-                            if (targetWs && targetWs.readyState === WebSocket.OPEN) {
-                                targetWs.send(JSON.stringify({
-                                    type: 'PRIVATE_MESSAGE',
-                                    fromId,
-                                    message: chatMessage
-                                }));
-                            }
-                        }
-                    }
-                }
-            } catch (error) {
-                console.error('Error handling message:', error);
+            console.log(`Message from ${clientId} to ${targetId}: ${text}`);
+            const targetWs = clients.get(targetId);
+            if (targetWs && targetWs.readyState === WebSocket.OPEN) {
+                targetWs.send(JSON.stringify({ clientId, text }));
+            } else {
+                ws.send(JSON.stringify({ type: 'ERROR', message: 'Target client not available or WebSocket not open' }));
             }
         });
 
         ws.on('close', () => {
-            const clientIdToRemove = [...clients.entries()].find(([id, socket]) => socket === ws)?.[0];
-            if (clientIdToRemove) {
-                clients.delete(clientIdToRemove);
-                userSockets.forEach((value, key) => {
-                    if (value === clientIdToRemove) {
-                        userSockets.delete(key);
-                    }
-                });
-                chatRooms.forEach((value, key) => {
-                    if (value.user1 === clientIdToRemove || value.user2 === clientIdToRemove) {
-                        chatRooms.delete(key);
-                    }
-                });
-            }
+            clients.delete(clientId);
+            console.log(`Client ${clientId} disconnected`);
         });
 
         ws.on('error', (error: Error) => {
@@ -74,5 +43,5 @@ export const initializeWebSocketServer = () => {
         });
     });
 
-    console.log(`WebSocket service running on ws://localhost:${port}`);
+    console.log(`WebSocket server running on ws://localhost:${port}`);
 };

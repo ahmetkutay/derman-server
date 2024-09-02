@@ -10,7 +10,6 @@ import router from './routes/index';
 import config from './config/config'
 import passport from 'passport';
 import { jwtStrategy } from './passport/jwtStrategy';
-import { createServer } from 'http';
 import { initializeWebSocketServer } from './webSocket';
 
 const app = express();

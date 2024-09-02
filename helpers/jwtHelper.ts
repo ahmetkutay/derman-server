@@ -35,6 +35,17 @@ class JWT {
             return true;
         }
     }
+    extractTokenVariables(token: string): { [key: string]: any } | null {
+        try {
+            const decodedToken = jwt.decode(token);
+            if (typeof decodedToken === 'object' && decodedToken !== null) {
+                return decodedToken as { [key: string]: any };
+            }
+            return null;
+        } catch (err) {
+            return null;
+        }
+    }
 }
 
 export default JWT;

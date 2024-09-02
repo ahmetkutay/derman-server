@@ -1,0 +1,54 @@
+import {WebSocketServer, WebSocket} from 'ws';
+import config from './config/config';
+import User from './model/userModel';
+
+export const initializeWebSocketServer = () => {
+    const port = config.webSocket.port;
+    const wss = new WebSocketServer({port});
+
+    const clients: Map<string, WebSocket> = new Map();
+
+    wss.on('connection', async (ws: WebSocket, request) => {
+        const userId = request.headers['user-id'];
+
+        if (!userId) {
+            ws.send(JSON.stringify({type: 'ERROR', message: 'User ID not provided'}));
+            ws.close();
+            return;
+        }
+        console.log(User)
+        const user = await getUserById(userId);
+        if (!user) {
+            ws.send(JSON.stringify({type: 'ERROR', message: 'Invalid User ID'}));
+            ws.close();
+            return;
+        }
+
+        clients.set(userId, ws);
+        ws.send(JSON.stringify({type: 'WELCOME', id: userId}));
+
+        ws.on('message', (data: WebSocket.Data) => {
+            const message = JSON.parse(data.toString());
+            const {targetId, text} = message;
+
+            console.log(`Message from ${userId} to ${targetId}: ${text}`);
+            const targetWs = clients.get(targetId);
+            if (targetWs && targetWs.readyState === WebSocket.OPEN) {
+                targetWs.send(JSON.stringify({userId, text}));
+            } else {
+                ws.send(JSON.stringify({type: 'ERROR', message: 'Target client not available or WebSocket not open'}));
+            }
+        });
+
+        ws.on('close', () => {
+            clients.delete(userId);
+            console.log(`User ${userId} disconnected`);
+        });
+
+        ws.on('error', (error: Error) => {
+            console.error('WebSocket error:', error.message);
+        });
+    });
+
+    console.log(`WebSocket server running on ws://localhost:${port}`);
+};
