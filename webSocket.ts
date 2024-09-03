@@ -1,6 +1,20 @@
 import { WebSocketServer, WebSocket } from 'ws';
 import config from './config/config';
 import JwtHelper from './helpers/jwtHelper';
+import mongoose from "mongoose";
+import Message,{IMessage} from "./model/chatModel";
+import {createMessage} from "./services/messageService";
+
+const mongoUriWebSocket: string = config.database.mongodb.dsn as unknown as string;
+
+if (!mongoUriWebSocket) {
+    throw new Error('MongoDB URI is not defined in the environment variables.');
+}
+mongoose.connect(mongoUriWebSocket).then(() => {
+    console.log('Connected to MongoDB');
+}).catch((error: Error) => {
+    console.error('Error connecting to MongoDB:', error.message);
+});
 
 // Initialize WebSocket server
 const port = config.webSocket.port;
@@ -36,10 +50,26 @@ wss.on('connection', (ws: WebSocket, request) => {
     console.log(`Client ${clientId} connected`);
 
     // @ts-ignore
-    ws.on('message', (data: WebSocket.Data) => {
+    ws.on('message', async (data: WebSocket.Data) => {
         const message = JSON.parse(data.toString());
         const { targetId, text } = message;
         console.log(`Message from ${clientId} to ${targetId}: ${text}`);
+
+        // Save the message to the database
+        const newMessage: Partial<IMessage> = ({
+            senderId: clientId,
+            receiverId: targetId,
+            text: text,
+            timestamp: new Date(),
+        });
+
+        try {
+            await createMessage(newMessage);
+        } catch (err) {
+            console.error('Error saving message:', err);
+            ws.send(JSON.stringify({ type: 'ERROR', message: 'Failed to save message' }));
+        }
+
         const targetWs = clients.get(targetId);
         if (targetWs && targetWs.readyState === WebSocket.OPEN) {
             targetWs.send(JSON.stringify({ clientId, text }));
