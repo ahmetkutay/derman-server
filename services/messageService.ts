@@ -9,10 +9,10 @@ export async function createMessage(messageData: Partial<IMessage>): Promise<IMe
     return await message.save();
 }
 
-export async function updatePost(id: string, postData: Partial<IMessage>): Promise<IMessage | null> {
-    return Message.findByIdAndUpdate(id, postData, {new: true});
+export async function updateMessage(id: string, messageData: Partial<IMessage>): Promise<IMessage | null> {
+    return Message.findByIdAndUpdate(id, messageData, {new: true});
 }
 
-export async function deletePost(id: string): Promise<IMessage | null> {
+export async function deleteMessage(id: string): Promise<IMessage | null> {
     return Message.findByIdAndDelete(id).exec();
 }
