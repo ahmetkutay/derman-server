@@ -10,6 +10,7 @@ import router from './routes/index';
 import config from './config/config'
 import passport from 'passport';
 import { jwtStrategy } from './passport/jwtStrategy';
+import path from 'path';
 
 const app = express();
 
@@ -42,6 +43,7 @@ app.use(passport.initialize())
 jwtStrategy(passport)
 
 app.use('/v1', router);
+app.use('/v1', express.static(path.join(__dirname, '..', '..', 'views')));
 
 app.get('/protected', passport.authenticate('jwt', { session: false }), (req, res) => {
     res.send('This is a protected route');
