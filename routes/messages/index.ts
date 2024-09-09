@@ -1,4 +1,4 @@
-import {Router, Request, Response, text} from 'express';
+import {Router, Request, Response} from 'express';
 import {createPost, deletePost, getAllPosts, updatePost} from '../../services/postService'
 import {ITweet} from "../../model/postModel";
 const router = Router();

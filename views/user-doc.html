@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><!DOCTYPE html>
+      <html lang="en">
+      <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>API Documentation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f4f4f4;
+    }
+    h1 {
+      color: #333;
+    }
+    .endpoint {
+      background-color: #fff;
+      border: 1px solid #ddd;
+      padding: 15px;
+      margin-bottom: 10px;
+    }
+    .endpoint h2 {
+      margin-top: 0;
+    }
+    .endpoint pre {
+      background-color: #eee;
+      padding: 10px;
+      overflow-x: auto;
+    }
+    .note {
+      color: #d9534f;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<h1>API Documentation</h1>
+<p class="note">Note: All endpoints require a valid JWT token in the <code>Authorization</code> header as "Bearer &lt;token&gt;" for authentication.</p>
+
+<div class="endpoint">
+  <h2>User Routes</h2>
+
+  <h3>Request Password Reset Code</h3>
+  <p><strong>POST</strong> /v1/user/reset-password/code</p>
+  <pre>
+Request Body:
+{
+    "_id": "userId"
+}
+
+Response:
+Status: 200 OK
+{
+    "message": "Password reset code sent"
+}
+    </pre>
+
+  <h3>Reset Password</h3>
+  <p><strong>POST</strong> /v1/user/reset-password</p>
+  <pre>
+Request Body:
+{
+    "_id": "userId",
+    "token": "resetToken",
+    "password": "oldPassword",
+    "newPassword": "newPassword"
+}
+
+Response:
+Status: 200 OK
+{
+    "message": "Password successfully reset"
+}
+    </pre>
+</div>
+
+</body>
+</html>
+</title>
+</head>
+<body>
+
+</body>
+</html>

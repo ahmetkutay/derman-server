@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Auth API Documentation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 20px;
+    }
+    .container {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h1, h2, h3 {
+      color: #333;
+    }
+    .endpoint {
+      margin-bottom: 30px;
+    }
+    .method {
+      color: white;
+      padding: 5px 10px;
+      border-radius: 5px;
+    }
+    .method.post { background-color: #007bff; }
+    .param, .response {
+      background-color: #f9f9f9;
+      padding: 10px;
+      border-radius: 5px;
+      margin-top: 5px;
+    }
+    code {
+      background-color: #f1f1f1;
+      padding: 2px 5px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Auth API Documentation</h1>
+
+  <!-- Login Endpoint -->
+  <div class="endpoint">
+    <h2>Login</h2>
+    <span class="method post">POST</span> <code>/v1/auth/</code>
+    <h3>Request Body:</h3>
+    <div class="param">
+                <pre>
+{
+    "username": "user123",
+    "password": "password123"
+}</pre>
+    </div>
+    <h3>Response:</h3>
+    <div class="response">
+                <pre>
+{
+    "accessToken": "yourAccessToken",
+    "refreshedToken": "yourRefreshToken"
+}</pre>
+    </div>
+  </div>
+
+  <!-- Register Endpoint -->
+  <div class="endpoint">
+    <h2>Register</h2>
+    <span class="method post">POST</span> <code>/v1/auth/register</code>
+    <h3>Request Body:</h3>
+    <div class="param">
+                <pre>
+{
+    "username": "user123",
+    "first_name": "John",
+    "last_name": "Doe",
+    "email": "john.doe@example.com",
+    "password": "password123",
+    "phone": "1234567890",
+    "birthdate": "1990-01-01",
+    "gender": "male"
+}</pre>
+    </div>
+    <h3>Response:</h3>
+    <div class="response">
+                <pre>
+{
+    "user": "userId"
+}</pre>
+    </div>
+  </div>
+
+  <!-- Logout Endpoint -->
+  <div class="endpoint">
+    <h2>Logout</h2>
+    <span class="method post">POST</span> <code>/v1/auth/logout</code>
+    <h3>Request Header:</h3>
+    <div class="param">
+      <code>Authorization: Bearer &lt;token&gt;</code>
+    </div>
+    <h3>Response:</h3>
+    <div class="response">
+                <pre>
+{
+    "message": "Logged out successfully"
+}</pre>
+    </div>
+  </div>
+
+  <!-- Verification Endpoint -->
+  <div class="endpoint">
+    <h2>Verification</h2>
+    <span class="method post">POST</span> <code>/v1/auth/verification</code>
+    <h3>Request Body:</h3>
+    <div class="param">
+                <pre>
+{
+    "token": "verificationToken",
+    "id": "userId"
+}</pre>
+    </div>
+    <h3>Response:</h3>
+    <div class="response">
+                <pre>
+"Verified"</pre>
+    </div>
+  </div>
+</div>
+</body>
+</html>
