@@ -3,54 +3,392 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>API Documentation - Home</title>
+    <title>API Documentation</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
             background-color: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            text-align: center;
+            margin: 20px;
         }
-        h1 {
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+        }
+        h1, h2, h3 {
             color: #333;
-            margin-bottom: 20px;
         }
-        .buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+        .endpoint {
+            margin-bottom: 30px;
         }
-        .button {
-            display: inline-block;
-            padding: 15px 30px;
-            font-size: 18px;
-            color: #fff;
-            background-color: #007bff;
-            border: none;
+        .method {
+            color: white;
+            padding: 5px 10px;
             border-radius: 5px;
-            text-decoration: none;
-            text-align: center;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
         }
-        .button:hover {
-            background-color: #0056b3;
+        .method.post { background-color: #007bff; }
+        .method.put { background-color: #28a745; }
+        .method.delete { background-color: #dc3545; }
+        .param, .response {
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 5px;
+        }
+        code {
+            background-color: #f1f1f1;
+            padding: 2px 5px;
+            border-radius: 5px;
+        }
+        .note {
+            color: #d9534f;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
 
-<h1>API Documentation</h1>
-<div class="buttons">
-    <a href="auth-doc.html" class="button">Auth</a>
-    <a href="comment-doc.html" class="button">Comment</a>
-    <a href="user-doc.html" class="button">User</a>
-    <a href="post-doc.html" class="button">Post</a>
+<div class="container">
+    <h1>Auth API Documentation</h1>
+
+    <!-- Login Endpoint -->
+    <div class="endpoint">
+        <h2>Login</h2>
+        <span class="method post">POST</span> <code>/v1/auth/</code>
+        <h3>Request Body:</h3>
+        <div class="param">
+                <pre>
+{
+    "username": "user123",
+    "password": "password123"
+}</pre>
+        </div>
+        <h3>Response:</h3>
+        <div class="response">
+                <pre>
+{
+    "accessToken": "yourAccessToken",
+    "refreshedToken": "yourRefreshToken"
+}</pre>
+        </div>
+    </div>
+
+    <!-- Register Endpoint -->
+    <div class="endpoint">
+        <h2>Register</h2>
+        <span class="method post">POST</span> <code>/v1/auth/register</code>
+        <h3>Request Body:</h3>
+        <div class="param">
+                <pre>
+{
+    "username": "user123",
+    "first_name": "John",
+    "last_name": "Doe",
+    "email": "john.doe@example.com",
+    "password": "password123",
+    "phone": "1234567890",
+    "birthdate": "1990-01-01",
+    "gender": "male"
+}</pre>
+        </div>
+        <h3>Response:</h3>
+        <div class="response">
+                <pre>
+{
+    "user": "userId"
+}</pre>
+        </div>
+    </div>
+
+    <!-- Logout Endpoint -->
+    <div class="endpoint">
+        <h2>Logout</h2>
+        <span class="method post">POST</span> <code>/v1/auth/logout</code>
+        <h3>Request Header:</h3>
+        <div class="param">
+            <code>Authorization: Bearer &lt;token&gt;</code>
+        </div>
+        <h3>Response:</h3>
+        <div class="response">
+                <pre>
+{
+    "message": "Logged out successfully"
+}</pre>
+        </div>
+    </div>
+
+    <!-- Verification Endpoint -->
+    <div class="endpoint">
+        <h2>Verification</h2>
+        <span class="method post">POST</span> <code>/v1/auth/verification</code>
+        <h3>Request Body:</h3>
+        <div class="param">
+                <pre>
+{
+    "token": "verificationToken",
+    "id": "userId"
+}</pre>
+        </div>
+        <h3>Response:</h3>
+        <div class="response">
+                <pre>
+"Verified"</pre>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <h1>Comment & Reply API Documentation</h1>
+
+    <!-- Comment Routes -->
+    <div class="endpoint">
+        <h2>Create Comment</h2>
+        <span class="method post">POST</span> <code>/v1/comment/:postId</code>
+        <h3>Request Body:</h3>
+        <div class="param">
+                <pre>
+{
+    "text": "This is a comment"
+}</pre>
+        </div>
+        <h3>Response:</h3>
+        <div class="response">
+                <pre>
+{
+    "_id": "commentId"
+}</pre>
+        </div>
+    </div>
+
+    <div class="endpoint">
+        <h2>Update Comment</h2>
+        <span class="method put">PUT</span> <code>/v1/comment/:postId/:commentId</code>
+        <h3>Request Body:</h3>
+        <div class="param">
+                <pre>
+{
+    "text": "Updated comment text"
+}</pre>
+        </div>
+        <h3>Response:</h3>
+        <div class="response">
+                <pre>
+{
+    "_id": "commentId"
+}</pre>
+        </div>
+    </div>
+
+    <div class="endpoint">
+        <h2>Delete Comment</h2>
+        <span class="method delete">DELETE</span> <code>/v1/comment/:postId/:commentId</code>
+        <h3>Response:</h3>
+        <div class="response">
+                <pre>
+{
+    "_id": "commentId"
+}</pre>
+        </div>
+    </div>
+
+    <!-- Reply Routes -->
+    <div class="endpoint">
+        <h2>Create Reply</h2>
+        <span class="method post">POST</span> <code>/v1/comment/:postId/:commentId/reply</code>
+        <h3>Request Body:</h3>
+        <div class="param">
+                <pre>
+{
+    "text": "This is a reply"
+}</pre>
+        </div>
+        <h3>Response:</h3>
+        <div class="response">
+                <pre>
+{
+    "_id": "replyId"
+}</pre>
+        </div>
+    </div>
+
+    <div class="endpoint">
+        <h2>Update Reply</h2>
+        <span class="method put">PUT</span> <code>/v1/comment/:postId/:commentId/reply/:replyId</code>
+        <h3>Request Body:</h3>
+        <div class="param">
+                <pre>
+{
+    "text": "Updated reply text"
+}</pre>
+        </div>
+        <h3>Response:</h3>
+        <div class="response">
+                <pre>
+{
+    "_id": "replyId"
+}</pre>
+        </div>
+    </div>
+
+    <div class="endpoint">
+        <h2>Delete Reply</h2>
+        <span class="method delete">DELETE</span> <code>/v1/comment/:postId/:commentId/reply/:replyId</code>
+        <h3>Response:</h3>
+        <div class="response">
+                <pre>
+{
+    "_id": "replyId"
+}</pre>
+        </div>
+    </div>
+
+</div>
+
+<div class="container">
+    <h1>Post API Documentation</h1>
+    <p class="note">Note: All endpoints require a valid JWT token in the <code>Authorization</code> header as "Bearer &lt;token&gt;" for authentication.</p>
+
+    <div class="endpoint">
+        <h2>Get All Posts</h2>
+        <p><strong>GET</strong> /v1/post/</p>
+        <p>Fetches all posts from the database.</p>
+        <pre>
+Request Header:
+Authorization: Bearer &lt;token&gt;
+
+Response:
+Status: 200 OK
+[
+    {
+        "_id": "postId",
+        "text": "Post content",
+        "author": "userId",
+        "category": "categoryName",
+        "createdAt": "2024-09-09T10:00:00.000Z",
+        "updatedAt": "2024-09-09T10:00:00.000Z"
+    },
+    ...
+]
+    </pre>
+    </div>
+
+    <div class="endpoint">
+        <h2>Create Post</h2>
+        <p><strong>POST</strong> /v1/post/</p>
+        <p>Creates a new post.</p>
+        <pre>
+Request Header:
+Authorization: Bearer &lt;token&gt;
+
+Request Body:
+{
+    "text": "Post content",
+    "category": "Category name"
+}
+
+Response:
+Status: 201 Created
+{
+    "_id": "postId"
+}
+    </pre>
+    </div>
+
+    <div class="endpoint">
+        <h2>Update Post</h2>
+        <p><strong>PUT</strong> /v1/post/:postId</p>
+        <p>Updates an existing post.</p>
+        <pre>
+Request Header:
+Authorization: Bearer &lt;token&gt;
+
+Request Body:
+{
+    "text": "Updated post content",
+    "category": "Updated category name"
+}
+
+Response:
+Status: 200 OK
+{
+    "_id": "postId"
+}
+    </pre>
+    </div>
+
+    <div class="endpoint">
+        <h2>Delete Post</h2>
+        <p><strong>DELETE</strong> /v1/post/:postId</p>
+        <p>Deletes a post by ID.</p>
+        <pre>
+Request Header:
+Authorization: Bearer &lt;token&gt;
+
+Response:
+Status: 200 OK
+{
+    "message": "Post deleted successfully"
+}
+    </pre>
+    </div>
+</div>
+
+<div class="container">
+    <h1>User API Documentation</h1>
+
+    <div class="endpoint">
+        <h2>Get User Profile</h2>
+        <span class="method get">GET</span> <code>/v1/user/:userId</code>
+        <h3>Response:</h3>
+        <div class="response">
+                <pre>
+{
+    "id": "userId",
+    "username": "user123",
+    "email": "user@example.com",
+    "firstName": "John",
+    "lastName": "Doe",
+    "phone": "1234567890"
+}</pre>
+        </div>
+    </div>
+
+    <div class="endpoint">
+        <h2>Update User Profile</h2>
+        <span class="method put">PUT</span> <code>/v1/user/:userId</code>
+        <h3>Request Body:</h3>
+        <div class="param">
+                <pre>
+{
+    "username": "newUsername",
+    "firstName": "John",
+    "lastName": "Doe",
+    "phone": "0987654321"
+}</pre>
+        </div>
+        <h3>Response:</h3>
+        <div class="response">
+                <pre>
+{
+    "message": "Profile updated"
+}</pre>
+        </div>
+    </div>
+
+    <div class="endpoint">
+        <h2>Delete User</h2>
+        <span class="method delete">DELETE</span> <code>/v1/user/:userId</code>
+        <h3>Response:</h3>
+        <div class="response">
+                <pre>
+{
+    "message": "User deleted successfully"
+}</pre>
+        </div>
+    </div>
+
 </div>
 
 </body>
